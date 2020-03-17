@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+</head>
+<body>
+<!--vue组件
+    类似于相同代码的抽取，可接受父元素的值，也可返回响应
+    注意：组件名要小写字母
+-->
+<div id="vueid1">
+    <mytag></mytag>
+    <script>
+        /*全局组件*/
+        Vue.component('mytag',{
+            template:'<h1>自定义组件</h1>'
+        })
+
+        new Vue({
+            el:'#vueid1'
+        })
+    </script>
+</div>
+
+
+<!--局部组件和prop来将父级值传递到自定义的组件中去-->
+<div id="vueid2">
+
+    <mytag message="hello"></mytag>
+
+    <script>
+        var child = {
+            props:['message'],
+            template:'<h1>{{message}}</h1>'
+        }
+        new Vue({
+            el:'#vueid2',
+            components:{
+                'mytag':child
+            }
+        })
+    </script>
+</div>
+
+<!--动态prop-->
+<div id="vueid3">
+
+    <input v-model="myvalue" />
+
+    <mytag1 :message="myvalue"></mytag1>
+
+    <script>
+        var child={
+            props:['message'],
+            template:'<span>{{message}}</span>'
+        }
+
+        new Vue({
+            el:'#vueid3',
+            data:{
+              myvalue:'myvaluevalue'
+            },
+            components:{
+                'mytag1':child
+            }
+        })
+
+    </script>
+</div>
+
+<!--和上面相反，自定义的组件反馈到父组件中去，利用v-on来事件绑定，通过在自定义的组件中调用这个触发函数，来
+    达到和父组件联系的效果,出错，https://www.runoob.com/vue2/vue-component.html
+-->
+<div id="vueid4">
+
+    <label>父级count{{total}}</label>
+    <mytag v-on:myfun="clickParent"></mytag>
+
+    <script>
+        var childtag = {
+            template:'<button :click="clickChild()">{{count}}</button>',
+            data: function(){
+                return {
+                    count:1
+                }
+            },
+            methods:{
+                clickChild:function(){
+                    this.count += 1;
+                    this.$emit('myfun');
+                }
+            }
+        }
+        new Vue({
+            el:'#vueid4',
+            data:{
+                total:1
+            },
+            components:{
+                mytag:childtag
+            },
+            methods:{
+                clickParent:function(){
+                    this.total++;
+                }
+            }
+        })
+
+    </script>
+</div>
+
+</body>
+</html>

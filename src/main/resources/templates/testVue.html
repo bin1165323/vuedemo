@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Vue 测试实例 - 菜鸟教程(runoob.com)</title>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <style>
+        .class1{
+            background-color:red;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <p>{{message}}</p>
+</div>
+
+<div id="vueid">
+    <p>site:{{site}}</p>
+    <p>url:{{url}}</p>
+    <p>{{detail()}}</p>
+</div>
+
+<!-- v-xxx -->
+<div id="vueid2">
+    <div :id="'list'+id">haah</div>
+    <div :class="{'class1':use}">ee</div>
+    <label for="rr">开关</label>
+    <input id="rr" v-model="use" type="checkbox" />
+    <p v-if="use">出现</p>
+
+    <button @click="clickButton()">点击按钮</button>
+</div>
+
+<!--过滤器-->
+<div id="vueid3">
+    {{message}}
+    {{message | myFomater}}
+    <script>
+        new Vue({
+            el:'#vueid3',
+            data:{
+                message:"lower"
+            },
+            filters:{
+                myFomater:function(value){
+                    if(!value) return ''
+                    value = value.toString()
+                    return value.charAt(0).toUpperCase()+value.slice(1)
+                }
+            }
+        })
+    </script>
+</div>
+
+<!--
+    new Vue对象中定义了值的名称和值，可映射到el对应的元素中去，其中定义的方法也可使用这些值并返回值到绑定元素中去显示
+    v-html:声明获取的值是html代码，以html样式展示
+    v-bind:值绑定，可由属性值来决定具体的值是什么，如vueid2中，由id的值来确定具体的id值,可缩写为  ：id="..."
+    v-on:事件响应，如点击事件的响应，可缩写为@click="..."
+    v-model:元素的值反归到Vue对象中定义的属性值
+    {{属性名 | 过滤器}},可用过滤器来对要显示的值进行预处理
+    v-if:后面接属性值，为真时显示元素，反之不显示
+    v-else:紧跟v-if后面，表示if为假时执行该块代码
+    v-else-if:紧跟v-if和v-else-if之后，如vueid5所示
+-->
+<div id="vueid4">
+    <input type="text" v-model="value" >
+    <br>
+    {{value}}
+    <script>
+        new Vue({
+            el:'#vueid4',
+            data:{
+                value:"first"
+            }
+        })
+
+    </script>
+</div>
+
+<div id="vueid5">
+    <div v-if="onCon">
+        第一个
+    </div>
+    <div v-else>
+        第二个
+    </div>
+    <div v-if="onCon">
+        第一个
+    </div>
+    <div v-else-if="twoCon">
+        第二个
+    </div>
+    <div v-else-if="threeCon">
+        第三个
+    </div>
+    <script>
+        new Vue({
+            el:'#vueid5',
+            data:{
+                onCon:false,
+                twoCon:false,
+                threeCon:true
+            }
+        })
+    </script>
+</div>
+
+
+<!--v-for:循环-->
+<div id="vueid6">
+    <ol>
+        <li v-for="site in sites">
+            {{site.name}}
+        </li>
+    </ol>
+    <script>
+        new Vue({
+            el: '#vueid6',
+            data: {
+                sites: [
+                    { name: 'name1' },
+                    { name: 'name2' },
+                    { name: 'name3' }
+                ]
+            }
+        })
+
+
+    </script>
+</div>
+
+<!--watch监听器 1-->
+<div id="vueid7">
+    <label>计数：{{counter}}</label>
+    <button @click="counter++">点击</button>
+    <script>
+        var vr = new Vue({
+            el:'#vueid7',
+            data:{
+                counter:1
+            }
+        });
+        vr.$watch('counter',function(nval,oval){
+            console.log("新值"+nval+";旧值："+oval);
+        })
+    </script>
+</div>
+
+<!--watch监听器 2-->
+<div id="vueid8">
+    <label for="input1">米</label>
+    <input id="input1" type="text" v-model="meter" />
+    <label for="input2">千米</label>
+    <input id="input2" type="text" v-model="kilometers" />
+    <script>
+        new Vue({
+            el:'#vueid8',
+            data:{
+                meter:1,
+                kilometers:2
+            },
+            watch:{
+                meter:function(val){
+                    this.meter = val;
+                    this.kilometers = this.meter * 1000;
+                },
+                kilometers:function (val) {
+                    this.meter = val/1000;
+                    this.kilometers = val;
+                }
+            }
+        })
+    </script>
+</div>
+
+<!--事件绑定-->
+<div id="vueid9">
+    <button @click="myMethod()">点击</button>
+    <script>
+        var myVue = new Vue({
+            el:'#vueid9',
+            data:{
+                name:'myName'
+            },
+            methods:{
+                myMethod:function(event){
+                    alert(this.name);
+                }
+            }
+        });
+        //myVue.myMethod();  可在内部调用
+    </script>
+</div>
+
+<!--事件修饰符
+   如：click.stop:可以去掉冒泡现象，冒泡现象，就是内外div都有点击事件时，点击里面的，外面的事件也会
+   触发，加上.stop修饰符后，就不会触发外面的事件
+-->
+<div id="vueid10">
+    <!--<div @click="myFun1()" style="height: 400px;background-color: yellow">
+        <div @click="myFun2()" style="height: 200px;background-color: red">
+            <a @click.stop="myFun()" href="http://www.baidu.com">链接</a>
+        </div>
+    </div>-->
+
+    <script>
+        new Vue({
+            el:'#vueid10',
+            data:{
+                value:'value'
+            },
+            methods:{
+                myFun:function(){
+                    alert("three")
+                },
+                myFun2:function(){
+                    alert("two")
+                },
+                myFun1:function(){
+                    alert("one");
+                }
+            }
+        })
+    </script>
+</div>
+
+
+<!--表单处理
+    用v-model来绑定值，类型name值，如在多个复选框中，用同个v-model来形成一组复选框
+    radio同理
+-->
+<div id="vueid11">
+    <input id="oneCB" type="checkbox" value="one" v-model="hobby">
+    <label for="oneCB" >one</label>
+    <input id="twoCB" type="checkbox" value="two" v-model="hobby">
+    <label for="twoCB" >two</label>
+    <input id="threeCB" type="checkbox" value="three" v-model="hobby">
+    <label for="threeCB" >three</label>
+    <br>
+    {{hobby}}
+    <script>
+        new Vue({
+            el:'#vueid11',
+            data:{
+                hobby:[]
+            }
+        })
+    </script>
+</div>
+
+
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            message: 'Hello Vue.js!'
+        }
+    });
+
+    var myVue = new Vue({
+        el:'#vueid',
+        data:{
+            site:'siteValue',
+            url:'urlValue',
+            other:'otherValue'
+        },
+        methods:{
+            detail:function(){
+                return this.site+"hahaha";
+            }
+        }
+    });
+
+    new Vue({
+        el:'#vueid2',
+        data:{
+            id:'cdcd',
+            use:true
+        },
+        methods:{
+            clickButton:function(){
+                this.id = this.id.split('').reverse().join('');
+            }
+        }
+    });
+
+</script>
+</body>
+</html>
