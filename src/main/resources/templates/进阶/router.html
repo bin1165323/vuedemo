@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue-路由</title>
+    <script src="https://cdn.staticfile.org/vue/2.4.2/vue.min.js"></script>
+    <script src="https://cdn.staticfile.org/vue-router/2.7.0/vue-router.min.js"></script>
+<!--
+    初步理解：在单个页面中进行路径跳转，匹配到路径，可以通过组件来渲染新的页面元素出来
+-->
+</head>
+<body>
+    <div id="app">
+        <h1>Hellp app</h1>
+        <p>
+            <router-link to="/foo">Go to Foo</router-link>
+            <router-link to="/bar">Go to Bar</router-link>
+        </p>
+
+        <router-view></router-view>
+    </div>
+<script>
+    const Foo = {template:'<div>foo</div>'}
+    const Bar = {template:'<div>bar</div>'}
+
+    const routes = [
+        {path:'/foo',component:Foo},
+        {path:'/bar',component:Bar}
+    ]
+
+    /*创建一个VueRouter对象*/
+    const router = new VueRouter({
+        routes:routes
+    })
+
+    /*mount,挂载到Dom对象上*/
+    const app = new Vue({
+        router
+    }).$mount("#app");
+
+
+</script>
+
+</body>
+</html>
